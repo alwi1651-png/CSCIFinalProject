@@ -8,6 +8,8 @@ Character::Character() {
     isFellowship=true;
     std::ifstream file("characters.txt");
     std::string line;
+    std::cout << "Whats your name bruh?  ";
+    std::cin >> playerName;
 
     // Skip header
     getline(file, line);

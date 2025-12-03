@@ -17,7 +17,10 @@ bool GameEnd(int playerPosition){
 
 
 int main() {
+    std::cout << "Welcome to the Genome Quest!\n";
+    std::cout << "Player One Registration:\n";
     Character player1;
+    std::cout << "Player Two Registration:\n";
     Character player2; 
    
     srand(time(0)); // Makes sure the board is random
@@ -26,11 +29,11 @@ int main() {
     game.displayBoard();
     cout << endl; 
 
-
     int turn = 0; //Player 1 
     int steps = 0;  
     bool player1Finished = false; 
     bool player2Finished = false; 
+    
     while(!GameEnd(game.getPlayerPosition(0)) || !GameEnd(game.getPlayerPosition(1))){ 
         if(turn == 0){
             if(player1Finished == true){
