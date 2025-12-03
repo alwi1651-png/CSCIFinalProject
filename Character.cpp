@@ -140,6 +140,10 @@ Character::Character() {
     }
 
     if(isFellowship){
+        characterDiscoveryPoints -= 5000;
+        characterAccuracy += 500;
+        characterEfficiency += 500;
+        characterInsight += 1000;
         std::cout << "As part of the Training Fellowship, you must choose an advisor to guide you through your journey.\n";
         std::cout << "Choose an advisor:\n";
         std::cout << R"(
@@ -186,6 +190,16 @@ Character::Character() {
                 advisorID = 4;
                 break;
         }
+    }
+
+    else {
+        // Direct Lab Assignment path chosen
+        characterDiscoveryPoints += 5000;
+        characterAccuracy += 200;
+        characterEfficiency += 200;
+        characterInsight += 200;
+        advisorID = -1; // No advisor assigned
+
     }
 }
 
