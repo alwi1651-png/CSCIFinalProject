@@ -4,12 +4,17 @@
 #include <string>
 #include "Character.h"
 
+
 Character::Character() {
+    
+
+
     isFellowship=true;
     std::ifstream file("characters.txt");
     std::string line;
     std::cout << "Whats your name bruh?  ";
     std::cin >> playerName;
+    
 
     // Skip header
     getline(file, line);
@@ -111,7 +116,7 @@ Character::Character() {
             and special abilities that could be gained through mentorship in Training 
             Fellowship, making it a riskier approach to become a Lead Genomicist. Also, 
             you will not get an initial advisor if you choose this path.
-            )";
+            )" << "\n";
 
         std::cin >> pathChoice;
 
@@ -142,7 +147,7 @@ Character::Character() {
             1. Dr. Assembler: An expert who helps improve efficiency and streamlines pipelines.
             2. Dr. Pop-Gen: A genetics specialist with insight for identifying rare genetic variants.
             3. Dr. Bio-Script: The genius behind the data analysis, helps debug code.
-            4. Dr. Loci: Your biggest supporter assisting you in learning the equipment)";
+            4. Dr. Loci: Your biggest supporter assisting you in learning the equipment)"<< "\n";
         int advisorChoice = -1;
         while (advisorChoice < 0 || advisorChoice >= 5) {
             std::cin >> advisorChoice;

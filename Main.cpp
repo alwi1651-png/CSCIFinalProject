@@ -24,7 +24,7 @@ int main() {
     Character player2; 
    
     srand(time(0)); // Makes sure the board is random
-    Board game; // set instance
+    Board game(player1.getIsFellowship(),player2.getIsFellowship()); // set instance
     game.initializeBoard();
     game.displayBoard();
     cout << endl; 
