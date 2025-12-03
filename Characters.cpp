@@ -180,8 +180,6 @@ Character::Character() {
                 break;
         }
     }
-
-
 }
 
 
