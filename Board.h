@@ -21,6 +21,7 @@ class Board {
         bool isPlayerOnTile(int player_index, int pos);
         void displayTile(int board_index, int player_index, int pos);
         void setPlayerRole(int player_index, bool isFellowship);
+        int spinner();
         bool playerOnePath;
         bool playerTwoPath;
 
@@ -38,5 +39,20 @@ class Board {
         int getPlayerBoard(int player_index) const {
             return _player_board_assignment[player_index];
         }
+        //returns whether player is finished 
+        void playerTurn(int player_index, std::string playerName);
+
+        bool playerFinished(int player_index) {
+            int playerPosition = getPlayerPosition(player_index);
+            return playerPosition == 51;
+        }
+        bool GameFinished(){
+            bool finished= false;
+            for (int indx =0; indx < _MAX_PLAYERS; indx++){
+                    finished = playerFinished(indx);
+            }
+            return finished;
+        }
+
 };
 #endif

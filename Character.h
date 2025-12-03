@@ -24,12 +24,13 @@ class Character {
         int characterDiscoveryPoints;
         bool isFellowship;
         int advisorID;
+        int playerIndex;
         static const int MIN_TRAIT_VALUE = 100;
 
         void enforceMinimumTraits();
 
     public:
-        Character();  // Constructor declaration
+        Character(int playeridx);  // Constructor declaration
 
         std::string getCharacterName(); 
         std::string getPlayerName();
@@ -51,6 +52,9 @@ class Character {
 
         int convertTraitsToDiscoveryPoints();
         void printSummary();
+        int getPlayerIndex() {
+            return playerIndex;
+        }   
 };
 
 #endif

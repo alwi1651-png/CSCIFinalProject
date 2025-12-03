@@ -4,24 +4,17 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <random>
 
 using namespace std; 
-
-int Spinner(){
-    return rand() % 6 + 1;
-}
-
-bool GameEnd(int playerPosition){
-   return playerPosition == 51;
-}
-
 
 int main() {
     std::cout << "Welcome to the Genome Quest!\n";
     std::cout << "Player One Registration:\n";
-    Character player1;
+    Character player1(0); //create player one with player index 0
     std::cout << "Player Two Registration:\n";
-    Character player2; 
+    Character player2(1); //create player two with player index 1
+    vector<Character> players = {player1, player2};
    
     srand(time(0)); // Makes sure the board is random
     Board game(player1.getIsFellowship(),player2.getIsFellowship()); // set instance
@@ -33,48 +26,20 @@ int main() {
     int steps = 0;  
     bool player1Finished = false; 
     bool player2Finished = false; 
-    
-    while(!GameEnd(game.getPlayerPosition(0)) || !GameEnd(game.getPlayerPosition(1))){ 
-        if(turn == 0){
-            if(player1Finished == true){
-                cout << player1.getPlayerName() << " has reached the Genome Conference" << endl; 
-            }
-        else{
-        steps = Spinner();
-        game.movePlayer(turn, steps);
-        int position = game.getPlayerPosition(turn);
-        game.displayBoard();
-        cout << endl; 
-            if(game.getPlayerPosition(0) == 51){
-                cout << player1.getPlayerName() << " has reach the Genome Conference" << endl; 
-            }
-            else{ cout << player1.getPlayerName() << " is on square " << game.getPlayerPosition(0) << endl;
+    bool playerOneTurn =true;
 
-            }
+    while(!game.GameFinished()){ 
+        if(playerOneTurn){
+            game.playerTurn(player1.getPlayerIndex(), player1.getPlayerName());
+            playerOneTurn = !playerOneTurn;
+        
+        }
+        //player two turn 
+        else{
+            game.playerTurn(player2.getPlayerIndex(), player2.getPlayerName());
+            playerOneTurn = !playerOneTurn;
         }
     }
-        if(turn == 1){
-            if(player2Finished == true){
-                cout << player2.getPlayerName()<< " has reached the Genome Conference" << endl; 
-            }
-        else{
-        steps = Spinner();
-        game.movePlayer(turn, steps);
-        int position = game.getPlayerPosition(turn);
-        game.displayBoard();
-        cout << endl; 
-            if(game.getPlayerPosition(1) == 51){
-                cout << player2.getPlayerName() << " has reach the Genome Conference" << endl; 
-            }
-            else{
-                cout << player2.getPlayerName() << " is on square " << game.getPlayerPosition(1) << endl;
-            }
-        }
-    }
-        turn = (turn + 1) % 2; 
-        } 
-    cout << "Both scientists have reached the Genome Conference"; 
-
+    std::cout << "Both scientists have reached the Genome Conference"; 
     return 0;
-
 }

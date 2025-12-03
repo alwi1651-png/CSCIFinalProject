@@ -5,7 +5,8 @@
 #include "Character.h"
 
 
-Character::Character() {
+Character::Character(int playeridx)  {
+    playerIndex = playeridx;
     
 
 

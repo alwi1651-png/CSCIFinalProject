@@ -3,6 +3,7 @@
 #include <ctime>
 #include <iostream>
 #include <string>
+#include <random>
 
 #define ORANGE "\033[48;2;230;115;0m"
 #define GREY   "\033[48;2;128;128;128m"
@@ -30,6 +31,16 @@ Board::Board(bool p1, bool p2)
     initializeBoard();
 }
 
+
+
+
+//We looked up how to do this
+int Spinner() {
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    static std::uniform_int_distribution<int> dist(1, 6);
+    return dist(gen);
+}
 
 void Board::initializeTiles(int board_index) {
     Tile tile;
@@ -157,4 +168,19 @@ void Board::setPlayerRole(int player_index, bool isFellowship) {
     } else {
         _player_board_assignment[player_index] = 1;
     }
+}
+
+
+void Board::playerTurn(int player_index, std::string playerName) {
+    if(playerFinished(player_index) == true){
+        std::cout << playerName << " has reached the Genome Conference" << endl; 
+    }
+    else{
+        int steps = Spinner();
+        movePlayer(player_index, steps);
+        int position = getPlayerPosition(player_index);
+        std::cout << endl; 
+        std::cout << playerName << " is on square " << getPlayerPosition(0)-1 << endl; 
+        }
+    displayBoard();
 }
