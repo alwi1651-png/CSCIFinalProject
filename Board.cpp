@@ -61,13 +61,37 @@ void Board::initializeTiles(int board_index) {
             green_count++;
         }
         else {
-            int color_choice = rand() % 5;
-            switch (color_choice) {
-                case 0: tile.color = 'B'; break;
-                case 1: tile.color = 'P'; break;
-                case 2: tile.color = 'T'; break;
-                case 3: tile.color = 'R'; break;
-                case 4: tile.color = 'U'; break;
+            // Adjust weighting based on board
+            int color_choice;
+
+            if (board_index == 0) {
+                //doubles chance of getting green tile which corresponds to discoveries
+                //you get more discoveries on fellowship board because of mentorship
+                color_choice = rand() % 7;
+                switch (color_choice) {
+                    case 0: 
+                    case 1: tile.color = 'G'; break;
+                    case 2: tile.color = 'B'; break;  
+                    case 3: tile.color = 'P'; break;
+                    case 4: tile.color = 'T'; break;
+                    case 5: tile.color = 'R'; break;
+                    case 6: tile.color = 'U'; break;
+                }
+            }
+            else {
+                //triples the chance of getting brown tile which corresponds to discoveries
+                //you get more discoveries on fellowship board because of mentorship
+                color_choice = rand() % 8;
+                switch (color_choice) {
+                    case 0: 
+                    case 1:
+                    case 2: tile.color = 'B'; break;
+                    case 3: tile.color = 'G'; break;  
+                    case 4: tile.color = 'P'; break;
+                    case 5: tile.color = 'T'; break;
+                    case 6: tile.color = 'R'; break;
+                    case 7: tile.color = 'U'; break;
+                }
             }
         }
 
@@ -133,15 +157,8 @@ void Board::displayTrack(int board_index) {
 
 void Board::displayBoard() {
     for (int board_index = 0; board_index < 2; board_index++) {
-
-        for (int pos = 0; pos < _BOARD_SIZE; pos++) {
-            displayTile(board_index, 0, pos);
-            displayTile(board_index, 1, pos);
-        }
+        displayTrack(board_index);
         cout << endl;
-
-        if (board_index == 0)
-            cout << endl;
     }
 }
 
@@ -180,7 +197,7 @@ void Board::playerTurn(int player_index, std::string playerName) {
         movePlayer(player_index, steps);
         int position = getPlayerPosition(player_index);
         std::cout << endl; 
-        std::cout << playerName << " is on square " << getPlayerPosition(0)-1 << endl; 
+        std::cout << playerName << " is on square " << position << endl; 
         }
     displayBoard();
 }
