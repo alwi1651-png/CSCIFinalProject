@@ -347,11 +347,7 @@ while (!turnComplete) {
 return vector<int>{deltaDiscovery, deltaInsight, deltaEfficiency, deltaAccuracy, deltaExperience};
 }
 
-
-
 int Board::getPlayerPosition(int player_index)  {
     return _player_position[player_index];
 }
-
-
 
