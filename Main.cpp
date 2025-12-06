@@ -18,7 +18,8 @@ int main() {
     vector<Character> players = {player1, player2};
    
     srand(time(0)); // Makes sure the board is random
-    Board game(player1.getIsFellowship(),player2.getIsFellowship()); // set instance
+    vector<bool> isFellowship = {player1.getIsFellowship(), player2.getIsFellowship()};
+    Board game(isFellowship); // set instance
     game.initializeBoard();
     game.displayBoard();
     cout << endl; 
@@ -30,41 +31,50 @@ int main() {
     bool playerOneTurn =true;
     int turnActions;
 
-while(!game.GameFinished()){ 
-     if(playerOneTurn){
-        cout << player1.getPlayerName() << " Choose 0 to see character summary" << endl; 
-        cout << player1.getPlayerName() << " Choose 1 to roll the dice" << endl; 
-        cin >>  turnActions; 
-        if(turnActions == 0){
-         player1.printSummary();
-         cout << player1.getPlayerName() << " Choose 1 to roll the dice" << endl;
-            cin >> turnActions;  
-    }
-        if(turnActions == 1){
-            game.playerTurn(player1.getPlayerIndex(), player1.getPlayerName());
-    
-        
-        }
-    playerOneTurn = !playerOneTurn;
-    }
-        //player two turn
-    else { // Player 2 turn
-    cout << player2.getPlayerName() << " Choose 0 to see character summary" << endl; 
-    cout << player2.getPlayerName() << " Choose 1 to roll the dice" << endl; 
-    int turnActions;
-    cin >> turnActions;
-    if(turnActions == 0){
-        player2.printSummary();
-        cout << player2.getPlayerName() << " Choose 1 to roll the dice" << endl;
-        cin >> turnActions;
-    }
-    if(turnActions == 1){
-        game.playerTurn(player2.getPlayerIndex(), player2.getPlayerName());
-    }
-    playerOneTurn = !playerOneTurn;
-}
+    while(!game.GameFinished()){ 
 
-}
+        if(playerOneTurn){
+            vector<int> statsDelta = game.playerTurn(
+                player1.getPlayerIndex(),
+                player1.getPlayerName(),
+                player1.getCharacterName(),
+                player1.getCharacterDiscoveryPoints(),
+                player1.getCharacterInsight(),
+                player1.getCharacterEfficiency(),                
+                player1.getCharacterAccuracy(),
+                player1.getCharacterExperience());
+
+                //we order by discovery points, insight, efficiency, accurace and experience
+                player1.addDiscoveryPoints(statsDelta[0]);
+                player1.addInsight(statsDelta[1]);
+                player1.addEfficiency(statsDelta[2]);
+                player1.addAccuracy(statsDelta[3]);
+                player1.addExperience(statsDelta[4]);
+
+                playerOneTurn = !playerOneTurn;
+        }
+        //player two turn
+        else { 
+            vector<int> statsDelta  =game.playerTurn(
+                player2.getPlayerIndex(),
+                player2.getPlayerName(),
+                player2.getCharacterName(),
+                player2.getCharacterDiscoveryPoints(),
+                player2.getCharacterInsight(),
+                player2.getCharacterEfficiency(),
+                player2.getCharacterAccuracy(),
+                player2.getCharacterExperience());
+
+            player2.addDiscoveryPoints(statsDelta[0]);
+            player2.addInsight(statsDelta[1]);
+            player2.addEfficiency(statsDelta[2]);
+            player2.addAccuracy(statsDelta[3]);
+            player2.addExperience(statsDelta[4]);
+
+            playerOneTurn = !playerOneTurn;
+            }
+        }
+
     std::cout << "Both scientists have reached the Genome Conference" << endl;  
     player1.convertTraitsToDiscoveryPoints(); 
     player2.convertTraitsToDiscoveryPoints();

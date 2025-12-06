@@ -41,15 +41,20 @@ class Character {
         int getCharacterEfficiency();
         int getCharacterInsight();
         int getCharacterDiscoveryPoints();
+        
         bool hasAdvisor();
         int getAdvisorId();
         bool getIsFellowship();
 
+        //t’s important to note that the values for Accuracy, Efficiency, and Insight cannot
+        //go below 100 points throughout the entire game. If the values are below 100, default them to
+        //100.
         // Mutators
         void addDiscoveryPoints(int delta);
         void addAccuracy(int delta);
         void addEfficiency(int delta);
         void addInsight(int delta);
+        void addExperience(int delta);
 
         int convertTraitsToDiscoveryPoints();
         void printSummary();

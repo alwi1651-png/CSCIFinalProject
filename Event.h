@@ -6,12 +6,55 @@
 #include <vector>
 #include <string>
 class Event {
-public:
-    std::string description;
-    int pathType;        // 0 = Training Fellowship; 1 = Direct Lab Assignment
-    int advisor;         // 0 = none; 1 = Dr. Aliquot; 2 = Dr. Assembler; etc.
-    int discoveryPoints; // can be negative
+    private: 
+        std::string description;
+        int pathType;        // 0 = Training Fellowship; 1 = Direct Lab Assignment
+        int advisor;         // 0 = none; 1 = Dr. Aliquot; 2 = Dr. Assembler; etc.
+        int discoveryPoints; // can be negative
 
-    Event() : description(""), pathType(0), advisor(0), discoveryPoints(0) {}
+    public:
+        Event(std::string parseLine) {
+            std::stringstream ss(parseLine);
+            std::string token;
+
+            if (std::getline(ss, token, '|')) {
+                description = token;
+            }
+            if (std::getline(ss, token, '|')) {
+                pathType = std::stoi(token);
+            }
+            if (std::getline(ss, token, '|')) {
+                advisor = std::stoi(token);
+            }
+            if (std::getline(ss, token, '|')) {
+                discoveryPoints = std::stoi(token);
+            }
+
+        }
+        int getAdvisor() {
+            return advisor;
+        }
+        int getPathType() {
+            return pathType;
+        }
+        int getDiscoveryPoints() {
+            return discoveryPoints;
+        }
+        std::string getDescription() {
+            return description;
+        }
+        void setDescription(std::string desc) {
+            description = desc;
+        }
+        void setPathType(int pType) {
+            pathType = pType;
+        }
+        void setAdvisor(int adv) {
+            advisor = adv;
+        }
+        void setDiscoveryPoints(int dp) {
+            discoveryPoints = dp;
+        }
+
 };
 #endif

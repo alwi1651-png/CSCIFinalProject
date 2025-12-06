@@ -209,18 +209,7 @@ Character::Character(int playeridx)  {
 }
 
 
-void Character::enforceMinimumTraits() {
 
-    if (characterAccuracy < MIN_TRAIT_VALUE) {
-        characterAccuracy = MIN_TRAIT_VALUE;
-    }
-    if (characterEfficiency < MIN_TRAIT_VALUE) {
-        characterEfficiency = MIN_TRAIT_VALUE;
-    }
-    if (characterInsight < MIN_TRAIT_VALUE) {
-        characterInsight = MIN_TRAIT_VALUE;
-    }
-}
 
 std::string Character::getCharacterName() {
     return characterName;
@@ -270,6 +259,9 @@ void Character::addEfficiency(int delta) {
 void Character::addInsight(int delta) {
     characterInsight += delta;
     if (characterInsight < MIN_TRAIT_VALUE) characterInsight = MIN_TRAIT_VALUE;
+}
+void Character::addExperience(int delta) {
+    characterExperience += delta;
 }
 
 // Convert each trait into discovery points as a final scoring mechanism
