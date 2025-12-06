@@ -1,4 +1,6 @@
 #include "Board.h"
+#include "Character.h"
+#include "Event.h"
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
@@ -19,8 +21,8 @@ using namespace std;
 
 //constructor
 Board::Board(bool p1, bool p2)
-    : playerOnePath(p1), playerTwoPath(p2)
-{
+    : playerOnePath(p1), playerTwoPath(p2){
+
     _player_count = _MAX_PLAYERS;
 
     for (int i = 0; i < _player_count; i++) {
@@ -32,8 +34,6 @@ Board::Board(bool p1, bool p2)
 }
 
 
-
-
 //We looked up how to do this
 int Spinner() {
     static std::random_device rd;
@@ -41,6 +41,7 @@ int Spinner() {
     static std::uniform_int_distribution<int> dist(1, 6);
     return dist(gen);
 }
+
 
 void Board::initializeTiles(int board_index) {
     Tile tile;
@@ -65,8 +66,9 @@ void Board::initializeTiles(int board_index) {
             int color_choice;
 
             if (board_index == 0) {
-                //doubles chance of getting green tile which corresponds to discoveries
+                //doubles chance of getting purple tile which corresponds to discoveries
                 //you get more discoveries on fellowship board because of mentorship
+                //Purple leads to a riddle and an opportunity for bonus points
                 color_choice = rand() % 7;
                 switch (color_choice) {
                     case 0: 
@@ -79,7 +81,7 @@ void Board::initializeTiles(int board_index) {
                 }
             }
             else {
-                //triples the chance of getting brown tile which corresponds to discoveries
+                //triples the chance of getting red tile which corresponds to discoveries
                 //you get more discoveries on fellowship board because of mentorship
                 color_choice = rand() % 8;
                 switch (color_choice) {
@@ -172,32 +174,92 @@ bool Board::movePlayer(int player_index, int steps) {
     return false;
 }
 
-int Board::getPlayerPosition(int player_index) const {
-    if (player_index >= 0 && player_index < _player_count) {
-        return _player_position[player_index];
+void greenTileTurn(const std::string filename) {
+    std::ifstream file(filename);
+    if (!file) {
+        std::cerr << "Error opening file: " << filename << std::endl;
+        return;
     }
-    return -1;
-}
 
-void Board::setPlayerRole(int player_index, bool isFellowship) {
-    if (isFellowship) {
-        _player_board_assignment[player_index] = 0;
-    } else {
-        _player_board_assignment[player_index] = 1;
+    std::vector<Event> events;
+    std::string line;
+
+    while (std::getline(file, line)) {
+        if (line.empty()) continue;
+
+        std::stringstream ss(line);
+        Event e;
+        std::string token;
+
+        if (!std::getline(ss, token, '|')) continue;
+        e.description = token;
+
+        if (!std::getline(ss, token, '|')) continue;
+        e.pathType = std::stoi(token);
+
+        if (!std::getline(ss, token, '|')) continue;
+        e.advisor = std::stoi(token);
+
+        if (!std::getline(ss, token, '|')) continue;
+        e.discoveryPoints = std::stoi(token);
+
+        events.push_back(e);
     }
+
+    std::cout << "Read " << events.size() << " events from " << filename << std::endl;
 }
 
 
 void Board::playerTurn(int player_index, std::string playerName) {
-    if(playerFinished(player_index) == true){
-        std::cout << playerName << " has reached the Genome Conference" << endl; 
+    if (playerFinished(player_index)) {
+        std::cout << playerName << " has reached the Genome Conference!" << std::endl;
+        return;
     }
-    else{
-        int steps = Spinner();
-        movePlayer(player_index, steps);
-        int position = getPlayerPosition(player_index);
-        std::cout << endl; 
-        std::cout << playerName << " is on square " << position << endl; 
+
+    // Roll dice
+    int steps = Spinner();
+    movePlayer(player_index, steps);
+    std::cout << playerName << " rolled a " << steps << std::endl;
+
+    // Get current position
+    int position = getPlayerPosition(player_index);
+    int board_index = _player_board_assignment[player_index];
+
+    std::cout << playerName << " is on square " << position << std::endl;
+
+    // Check tile color
+    char tile_color = _tiles[board_index][position].color;
+
+    if (tile_color == 'G') { // Green tile
+        // 50-50 chance for an event
+        if (rand() % 2 == 0) {
+            std::cout << "Green tile event triggered!\n";
+
+            // Read events from file
+            std::vector<Event> events = greenTileTurn("riddles.txt");
+            if (!events.empty()) {
+                int idx = rand() % events.size();       // Pick random event
+                Event e = events[idx];
+                std::cout << "Event: " << e.description 
+                          << " | Discovery Points: " << e.discoveryPoints << std::endl;
+
+                // Update player discovery points
+                // Assuming Character has addDiscoveryPoints(int)
+                if (player_index == 0) {
+                    _player_one_obj.addDiscoveryPoints(e.discoveryPoints);
+                } else {
+                    _player_two_obj.addDiscoveryPoints(e.discoveryPoints);
+                }
+            }
+        } else {
+            std::cout << "Nothing happens on this green tile.\n";
         }
+    }
+
+    
+
+    // Display board after move
     displayBoard();
 }
+
+

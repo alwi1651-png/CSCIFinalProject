@@ -5,6 +5,10 @@
 #include "Character.h"
 
 
+
+Character::Character(){
+    playerIndex = 0;
+}
 Character::Character(int playeridx)  {
     playerIndex = playeridx;
     

@@ -3,6 +3,7 @@
 
 #include "Tile.h"
 #include "Character.h"
+#include "Event.h"
 
 class Board {
     private:
@@ -25,6 +26,8 @@ class Board {
         int spinner();
         bool playerOnePath;
         bool playerTwoPath;
+    
+
 
     public:
         Board(bool playerOnePath, bool playerTwoPath);  // Constructor declaration
@@ -54,6 +57,7 @@ class Board {
             }
             return finished;
         }
-
+void greenTileTurn(const std::string filename);
+        
 };
 #endif

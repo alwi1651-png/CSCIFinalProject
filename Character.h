@@ -26,10 +26,11 @@ class Character {
         int advisorID;
         int playerIndex;
         static const int MIN_TRAIT_VALUE = 100;
-
+        
         void enforceMinimumTraits();
 
     public:
+        Character();
         Character(int playeridx);  // Constructor declaration
 
         std::string getCharacterName(); 
