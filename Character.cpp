@@ -288,13 +288,6 @@ void Character::addExperience(int delta) {
     characterExperience += delta;
 }
 
-// Convert each trait into discovery points as a final scoring mechanism
-int Character::convertTraitsToDiscoveryPoints() {
-    // Example conversion rates (you can adjust): accuracy/100 + efficiency/100 + insight/100, scaled
-    int converted = (characterAccuracy / 10) + (characterEfficiency / 10) + (characterInsight / 10);
-    characterDiscoveryPoints += converted;
-    return converted;
-}
 
 // Summary print
 void Character::printSummary() {

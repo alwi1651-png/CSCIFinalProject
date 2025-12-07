@@ -101,12 +101,17 @@ int main() {
         }
 
     std::cout << "Both scientists have reached the Genome Conference" << endl;  
+    std::cout << std:: endl; 
+    player1.printSummary();
+    std::cout << std:: endl; 
+    player2.printSummary();
+    std::cout << std:: endl; 
     player1.convertTraitsToDiscoveryPoints(); 
     player2.convertTraitsToDiscoveryPoints();
 
     if(player1.convertTraitsToDiscoveryPoints() > player2.convertTraitsToDiscoveryPoints()){
         cout << player1.getPlayerName() << " is your Lead Genomicist with " << player1.convertTraitsToDiscoveryPoints() << " Discovery Points" << endl;
-        player1.printSummary();
+       
     }
     else{
         cout << player2.getPlayerName() << " is your Lead Genomicist with " <<  player2.convertTraitsToDiscoveryPoints() << " Discovery Points" << endl;
