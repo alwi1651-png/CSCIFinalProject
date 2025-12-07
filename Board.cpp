@@ -44,17 +44,25 @@ Board::Board(vector<bool> isFellowship){
         events.push_back(e);
     }
 
-    ifstream riddleFile("riddles.txt");
-    //skip header
-    while (getline(riddleFile, line)) {
-        if (line.empty()) continue;
-        Riddle r(line);
-        riddles.push_back(r);
-    }
+   ifstream riddleFile("riddles.txt");
+getline(riddleFile, line);  // skips header
 
-    ifstream bonusRiddleFile("bonusRiddles.txt");
-    while(getline(bonusRiddleFile, line))
-    
+while (getline(riddleFile, line)) {
+    if (line.empty()) continue;  // skip empty lines
+    Riddle r(line);
+    riddles.push_back(r);
+}
+
+ifstream bonusRiddleFile("bonusRiddles.txt");
+getline(riddleFile, line); // skip header
+while (getline(bonusRiddleFile, line)) {
+    if (line.empty()) continue;
+
+    Riddle br("placeholder");  //consturctor requires a string 
+    br.bonusRiddle(line);       //load bonus question + bonus answer
+
+    bonusRiddles.push_back(br);
+}
 
     initializeBoard();
 }

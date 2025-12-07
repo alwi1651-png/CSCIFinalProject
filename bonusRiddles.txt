@@ -1,1 +1,13 @@
 Question|Answer
+What is the basic unit of heredity passed from parents to offspring?|Gene
+What is the molecule that carries genetic instructions in living organisms?|DNA
+What is the process by which DNA is copied before cell division? | Replication
+What is the sequence of three nucleotides that codes for an amino acid called?|Codon
+What cellular structure is responsible for protein synthesis? | Ribosome
+What is the molecule that carries amino acids to the ribosome during translation?|tRNA
+What process converts mRNA into a protein?|Translation
+What process produces mRNA from DNA?|Transcription|Helicase
+How many genes do humans have?|21000
+What is the biggest gene|Titin 
+What organelle contains most of the cell’s genetic material?|Nucleus
+What is a change in the DNA sequence called?|Mutation
