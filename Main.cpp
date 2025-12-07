@@ -16,7 +16,7 @@ int main() {
     std::cout << "Player Two Registration:\n";
     Character player2(1); //create player two with player index 1
     vector<Character> players = {player1, player2};
-   
+    
     srand(time(0)); // Makes sure the board is random
     vector<bool> isFellowship = {player1.getIsFellowship(), player2.getIsFellowship()};
     Board game(isFellowship); // set instance
@@ -55,7 +55,7 @@ int main() {
         }
         //player two turn
         else { 
-            vector<int> statsDelta  =game.playerTurn(
+            vector<int> statsDelta  = game.playerTurn(
                 player2.getPlayerIndex(),
                 player2.getPlayerName(),
                 player2.getCharacterName(),

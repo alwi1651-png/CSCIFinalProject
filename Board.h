@@ -202,9 +202,11 @@ class Board {
             std::string answer;
             std::cin>>  answer;
             if (answer == riddle.getAnswer()){
+                std::cout << "Correct!" << std::endl;
                 return 500;
             }
             else{
+                std::cout << "The correct answer was: " << riddle.getAnswer() << std:: endl;
                 return 0;
             }
         }

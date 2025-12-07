@@ -318,12 +318,16 @@ while (!turnComplete) {
                 cin >> s1 >> s2;
                 deltaDiscovery += static_cast<int>(strandSimilarity(s1, s2) * 100);
                 deltaInsight += 10;
+                cout << "Discovery Points Increase: " << deltaDiscovery <<endl;
+                cout << "Insight Increase: " << deltaInsight << endl;; 
             } else if (tile_color == 'P') { // Pink tile
                 string s1, s2;
                 cout << "DNA Task 2 - Enter two DNA strands (unequal lengths allowed):\n";
                 cin >> s1 >> s2;
                 deltaDiscovery += static_cast<int>(bestStrandMatch(s1, s2) * 100);
                 deltaInsight += 10;
+                cout << "Discovery Points Increase: " << deltaDiscovery <<endl;
+                cout << "Insight Increase: " << deltaInsight << endl;
             } else if (tile_color == 'R') { // Red tile
                 string s1, s2;
                 cout << "DNA Task 3 - Enter input and target DNA strands:\n";
@@ -331,6 +335,8 @@ while (!turnComplete) {
                 identifyMutations(s1, s2);
                 deltaAccuracy += 5;
                 deltaDiscovery += 20;
+                cout << "Accuracy Increase: " << deltaAccuracy <<endl;
+                cout << "Discovery Increase: " << deltaDiscovery << endl;
             } else if (tile_color == 'T') { // Brown tile
                 string s1;
                 cout << "DNA Task 4 - Enter DNA strand to transcribe to RNA:\n";
@@ -338,6 +344,8 @@ while (!turnComplete) {
                 transcribeDNAtoRNA(s1);
                 deltaEfficiency += 10;
                 deltaDiscovery += 10;
+                cout << "Accuracy Increase: " << deltaAccuracy <<endl;
+                cout << "Discovery Increase: " << deltaDiscovery << endl;
             } else if (tile_color == 'U') { // Purple tile
                 deltaInsight += handleRiddle();
                 deltaExperience += 50;
