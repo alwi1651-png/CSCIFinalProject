@@ -20,7 +20,7 @@
 using namespace std;
 
 //constructor
-Board::Board(std::vector<bool> isFellowship){
+Board::Board(vector<bool> isFellowship){
     int _MAX_PLAYERS = isFellowship.size();
 
 
@@ -42,6 +42,14 @@ Board::Board(std::vector<bool> isFellowship){
         if (line.empty()) continue;
         Event e(line);
         events.push_back(e);
+    }
+
+    ifstream riddleFile("riddles.txt");
+    //skip header
+    while (getline(riddleFile, line)) {
+        if (line.empty()) continue;
+        Riddle r(line);
+        riddles.push_back(r);
     }
     initializeBoard();
 }
@@ -231,7 +239,7 @@ vector<int> Board::playerTurn(int player_index, std::string playerName, std::str
 
 
 if (playerFinished(player_index)) {
-    std::cout << playerName << " has reached the Genome Conference!" << std::endl;
+    cout << playerName << " has reached the Genome Conference!" << std::endl;
     return vector<int>{0, 0, 0, 0, 0};
 }
 
@@ -239,34 +247,34 @@ int deltaDiscovery = 0, deltaInsight = 0, deltaEfficiency = 0, deltaAccuracy = 0
 bool turnComplete = false;
 
 while (!turnComplete) {
-    std::cout << "\n--- " << playerName << "'s Turn ---\n";
-    std::cout << "1) Check Player Progress\n";
-    std::cout << "2) Review Character\n";
-    std::cout << "3) Check Position\n";
-    std::cout << "4) Review your Advisor\n";
-    std::cout << "5) Move Forward\n";
-    std::cout << "Choose an option (1-5): ";
+    cout << "\n--- " << playerName << "'s Turn ---\n";
+    cout << "1) Check Player Progress\n";
+    cout << "2) Review Character\n";
+    cout << "3) Check Position\n";
+    cout << "4) Review your Advisor\n";
+    cout << "5) Move Forward\n";
+    cout << "Choose an option (1-5): ";
 
     int choice;
-    std::cin >> choice;
+    cin >> choice;
 
     switch (choice) {
         case 1: { // Check Player Progress
-            std::cout << "1) Review Discovery Points\n";
-            std::cout << "2) Review Trait stats\n";
+            cout << "1) Review Discovery Points\n";
+            cout << "2) Review Trait stats\n";
             int subchoice;
-            std::cin >> subchoice;
+            cin >> subchoice;
             if (subchoice == 1) {
-                std::cout << "Discovery Points: " << discoveryPoints << std::endl;
+                cout << "Discovery Points: " << discoveryPoints << std::endl;
             } else if (subchoice == 2) {
-                std::cout << "Traits - Insight: " << insight
+                cout << "Traits - Insight: " << insight
                           << ", Efficiency: " << efficiency
                           << ", Accuracy: " << accuracy << std::endl;
             }
             break;
         }
         case 2: { // Review Character
-            std::cout << "Character Name: " << characterName
+            cout << "Character Name: " << characterName
                       << ", Experience: " << experience << std::endl;
             break;
         }
@@ -275,14 +283,14 @@ while (!turnComplete) {
             break;
         }
         case 4: { // Review Advisor
-            std::cout << "1) Display Advisor Abilities\n";
-            std::cout << "2) Use Abilities for Challenge\n";
+            cout << "1) Display Advisor Abilities\n";
+            cout << "2) Use Abilities for Challenge\n";
             int subchoice;
-            std::cin >> subchoice;
+            cin >> subchoice;
             if (subchoice == 1) {
-                std::cout << "Advisor Abilities: " << getAdvisorAbilities(_player_advisor[player_index]) << std::endl;
+                cout << "Advisor Abilities: " << getAdvisorAbilities(_player_advisor[player_index]) << std::endl;
             } else if (subchoice == 2) {
-                std::cout << "Using advisor abilities for current challenge...\n";
+                cout << "Using advisor abilities for current challenge...\n";
                 // Implement ability effect here
             }
             break;
@@ -290,48 +298,48 @@ while (!turnComplete) {
         case 5: { // Move Forward
             int steps = spinner();
             movePlayer(player_index, steps);
-            std::cout << playerName << " rolled a " << steps << std::endl;
+            cout << playerName << " rolled a " << steps << std::endl;
 
             int position = getPlayerPosition(player_index);
             int board_index = _player_board_assignment[player_index];
             char tile_color = _tiles[board_index][position].color;
-            std::cout << playerName << " is on square " << position << std::endl;
+            cout << playerName << " is on square " << position << std::endl;
 
             if (tile_color == 'G') { // Green tile
                 if (rand() % 2 == 0) {
-                    std::cout << "Green tile event triggered!\n";
+                    cout << "Green tile event triggered!\n";
                     deltaDiscovery += greenTileTurn(player_index);
                 } else {
-                    std::cout << "No event on this green tile.\n";
+                    cout << "No event on this green tile.\n";
                 }
             } else if (tile_color == 'B') { // Blue tile
-                std::string s1, s2;
-                std::cout << "DNA Task 1 - Enter two DNA strands of equal length:\n";
-                std::cin >> s1 >> s2;
+                string s1, s2;
+                cout << "DNA Task 1 - Enter two DNA strands of equal length:\n";
+                cin >> s1 >> s2;
                 deltaDiscovery += static_cast<int>(strandSimilarity(s1, s2) * 100);
                 deltaInsight += 10;
             } else if (tile_color == 'P') { // Pink tile
-                std::string s1, s2;
-                std::cout << "DNA Task 2 - Enter two DNA strands (unequal lengths allowed):\n";
-                std::cin >> s1 >> s2;
-                deltaDiscovery += static_cast<int>(strandSimilarityUnequal(s1, s2) * 100);
+                string s1, s2;
+                cout << "DNA Task 2 - Enter two DNA strands (unequal lengths allowed):\n";
+                cin >> s1 >> s2;
+                deltaDiscovery += static_cast<int>(bestStrandMatch(s1, s2) * 100);
                 deltaInsight += 10;
             } else if (tile_color == 'R') { // Red tile
-                std::string s1, s2;
-                std::cout << "DNA Task 3 - Enter input and target DNA strands:\n";
-                std::cin >> s1 >> s2;
+                string s1, s2;
+                cout << "DNA Task 3 - Enter input and target DNA strands:\n";
+                cin >> s1 >> s2;
                 identifyMutations(s1, s2);
                 deltaAccuracy += 5;
                 deltaDiscovery += 20;
             } else if (tile_color == 'T') { // Brown tile
-                std::string s1;
-                std::cout << "DNA Task 4 - Enter DNA strand to transcribe to RNA:\n";
-                std::cin >> s1;
+                string s1;
+                cout << "DNA Task 4 - Enter DNA strand to transcribe to RNA:\n";
+                cin >> s1;
                 transcribeDNAtoRNA(s1);
                 deltaEfficiency += 10;
                 deltaDiscovery += 10;
             } else if (tile_color == 'U') { // Purple tile
-                deltaInsight += handleRiddle(player_index);
+                deltaInsight += handleRiddle();
                 deltaExperience += 50;
             }
 
@@ -340,7 +348,7 @@ while (!turnComplete) {
             break;
         }
         default:
-            std::cout << "Invalid choice, try again.\n";
+            cout << "Invalid choice, try again.\n";
     }
 }
 

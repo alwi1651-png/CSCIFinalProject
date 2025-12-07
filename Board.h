@@ -4,10 +4,13 @@
 #include "Tile.h"
 #include "Character.h"
 #include "Event.h"
+#include "Riddle.h"
 
 class Board {
     private:
         std::vector<Event> events;
+        std::vector<Riddle> riddles; 
+
         static const int _BOARD_SIZE = 52;
         static const int _MAX_PLAYERS = 2;
  
@@ -75,60 +78,135 @@ class Board {
         }
         int greenTileTurn(int player_index);
         
-        double strandSimilarity(std::string s1, std::string s2) {
-        if (s1.length() != s2.length()) return 0.0;
-        int matches = 0;
-        for (int i = 0; i < (int)s1.length(); i++) {
-        if (s1[i] == s2[i]) matches++;
-        }
-        return (double)matches / s1.length();
-    }
-
-    double strandSimilarityUnequal(std::string s1, std::string s2) {
-        std::string longStr = s1.length() >= s2.length() ? s1 : s2;
-        std::string shortStr = s1.length() < s2.length() ? s1 : s2;
-        double maxScore = 0.0;
-
-        for (int i = 0; i <= (int)(longStr.length() - shortStr.length()); i++) {
+        double strandSimilarity(std::string strandOne, std::string strandTwo) {
+            if (strandOne.length() != strandTwo.length()) return 0.0;
             int matches = 0;
-            for (int j = 0; j < (int)shortStr.length(); j++) {
-                if (shortStr[j] == longStr[i+j]) matches++;
+            for (int i = 0; i < (int)strandOne.length(); i++) {
+                if (strandOne[i] == strandTwo[i]) matches++;
             }
-            double score = (double)matches / shortStr.length();
-            if (score > maxScore) maxScore = score;
+            return (double)matches / strandOne.length();
         }
-        return maxScore;
 
-    }
+        int bestStrandMatch(std::string input_strand, std::string target_strand) {
+            std::string longStr = input_strand.length() >= target_strand.length() ? input_strand : target_strand;
+            std::string shortStr = input_strand.length() < target_strand.length() ? input_strand : target_strand;
+            double maxScore = 0.0;
+            int indexOfMaxSimilarity = 0;
 
-void identifyMutations(std::string input_strand, std::string target_strand) {
-    std::cout << "Mutation report:\n";
-    int len = (int)std::min(input_strand.length(), target_strand.length());
-    for (int i = 0; i < len; i++) {
-        if (input_strand[i] != target_strand[i]) {
-            std::cout << "Substitution at position " << i << ": " << input_strand[i] << " -> " << target_strand[i] << "\n";
+            for (int i = 0; i <= (int)(longStr.length() - shortStr.length()); i++) {
+                int matches = 0;
+                for (int j = 0; j < (int)shortStr.length(); j++) {
+                    if (shortStr[j] == longStr[i+j]) matches++;
+                }
+                double score = (double)matches / shortStr.length();
+                if (score > maxScore) { 
+                    maxScore = score;
+                    indexOfMaxSimilarity = i;
+                }
+            }
+            return indexOfMaxSimilarity;
         }
-    }
 
-    if (input_strand.length() < target_strand.length()) {
-        std::cout << "Insertion detected at position " << len << ": " << target_strand.substr(len) << "\n";
-    } else if (input_strand.length() > target_strand.length()) {
-        std::cout << "Deletion detected at position " << len << ": " << input_strand.substr(len) << "\n";
-    }
-}
+        void identifyMutations(std::string input_strand, std::string target_strand) {
+            int indexOfMaxSimilarity = bestStrandMatch(input_strand, target_strand);
+            std::cout << "Mutation report:\n";
 
-void transcribeDNAtoRNA(std::string strand) {
-    for (int i = 0; i < (int)strand.length(); i++) {
-    if (strand[i] == 'T') strand[i] = 'U';
-    }
-    std::cout << "RNA transcript: " << strand << std::endl;
-}
+            std::string longStr = input_strand.length() >= target_strand.length() ? input_strand : target_strand;
+            std::string shortStr = input_strand.length() < target_strand.length() ? input_strand : target_strand;
+            int len = shortStr.length();
 
-int handleRiddle(int player_index) {
-    std::cout << "Riddle challenge! Solve correctly to gain 500 Insight Points.\n";
-    // Placeholder: assume player always answers correctly
-    return 500;
-}
+            // Determine whether input_strand was the long one
+            bool inputIsLong = (input_strand.length() >= target_strand.length());
 
+            // Substitutions
+            for (int i = 0; i < len; i++) {
+                if (longStr[i + indexOfMaxSimilarity] != shortStr[i]) {
+                    int inputPos;
+                    if (inputIsLong) {
+                        inputPos = i + indexOfMaxSimilarity;               // input is longStr
+                    } else {
+                        inputPos = i;                                      // input is shortStr
+                    }
+                    std::cout << "Substitution at position "
+                            << (inputPos + 1) << ": "
+                            << (inputIsLong ? longStr[indexOfMaxSimilarity+i] : shortStr[i])
+                            << " -> "
+                            << (inputIsLong ? shortStr[i] : longStr[indexOfMaxSimilarity+i])
+                            << "\n";
+                }
+            }
+
+            // Insertions and deletions happen when there is extra characters
+            if (longStr.length() > shortStr.length()) {
+
+                // left side extra characters 
+                int leftExtraCount = indexOfMaxSimilarity;
+                if (leftExtraCount > 0) {
+                    for (int k = 0; k < leftExtraCount; k++) {
+                        char c = longStr[k];
+
+                        // Convert longStr position to input-strand coordinate
+                        int inputPos = inputIsLong ? k : -1;   // input shortStr has no left-side bases
+
+                        if (inputIsLong) {
+                            std::cout << "Deletion at position "
+                                    << (inputPos + 1) << ": " << c << "\n";
+                        } else {
+                            // insertion relative to input: insert before position 1
+                            std::cout << "Insertion at position "
+                                    << 1 << ": " << c << "\n";
+                        }
+                    }
+                }
+
+                // right side extras 
+                int rightStart = indexOfMaxSimilarity + len;
+                int rightExtraCount = longStr.length() - rightStart;
+
+                if (rightExtraCount > 0) {
+                    for (int k = 0; k < rightExtraCount; k++) {
+
+                        int pos = rightStart + k;
+                        char c = longStr[pos];
+
+                        int inputPos;
+                        if (inputIsLong) {
+                            inputPos = pos;                        // direct mapping into input strand
+                        } else {
+                            inputPos = input_strand.length();      // insert at end of input strand
+                        }
+
+                        if (inputIsLong) {
+                            std::cout << "Deletion at position "
+                                    << (inputPos + 1) << ": " << c << "\n";
+                        } else {
+                            std::cout << "Insertion at position "
+                                    << (inputPos + 1) << ": " << c << "\n";
+                        }
+                    }
+                }
+            }
+        }
+
+        void transcribeDNAtoRNA(std::string strand) {
+            for (int i = 0; i < (int)strand.length(); i++) {
+            if (strand[i] == 'T') strand[i] = 'U';
+            }
+            std::cout << "RNA transcript: " << strand << std::endl;
+        }
+
+        int handleRiddle() {
+            Riddle riddle = riddles[rand()% riddles.size()];
+            std::cout << "Riddle challenge! Solve correctly to gain 500 Insight Points.\n";
+            std::cout << riddle.getQuestion() << std::endl;
+            std::string answer;
+            std::cin>>  answer;
+            if (answer == riddle.getAnswer()){
+                return 500;
+            }
+            else{
+                return 0;
+            }
+        }
 };
 #endif
