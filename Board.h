@@ -204,9 +204,17 @@ class Board {
             std::cin>>  answer;
             if (answer == riddle.getAnswer()){
                 std::cout << "Correct!" << std::endl;
-                return 500;
-                Riddle bonusRiddle = bonusRiddles[rand()% riddles.size()];
-                std:: cout << "Congrats on solving the first riddle! You will now recieve a bonus riddle to gain an additional 250 Insight Points" << endl;
+                
+                std:: cout << "Congrats on solving the first riddle! You will now recieve a bonus riddle to gain an additional 250 Insight Points" << std::endl<<""<<std::endl;
+                std::cout<< riddle.getBonusQuestion()<<std::endl;
+                std::cin>>  answer;
+                if(answer == riddle.getBonusAnswer()){
+                    return 750;
+                }
+                else{
+                    std::cout<<"The correct bonus answer was"<< riddle.getBonusAnswer()<<std::endl;
+                    return 500;
+                }
                 
             }
             else{

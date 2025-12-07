@@ -92,9 +92,7 @@ void Board::initializeTiles(int board_index) {
             int color_choice;
 
             if (board_index == 0) {
-                //doubles chance of getting purple tile which corresponds to discoveries
-                //you get more discoveries on fellowship board because of mentorship
-                //Purple leads to a riddle and an opportunity for bonus points
+                //doubles chance of getting green tile
                 color_choice = rand() % 7;
                 switch (color_choice) {
                     case 0: 
@@ -107,8 +105,8 @@ void Board::initializeTiles(int board_index) {
                 }
             }
             else {
-                //triples the chance of getting red tile which corresponds to discoveries
-                //you get more discoveries on fellowship board because of mentorship
+                //triples the chance of getting blue tile
+         
                 color_choice = rand() % 8;
                 switch (color_choice) {
                     case 0: 

@@ -23,6 +23,13 @@ class Riddle{
             if (std::getline(ss, token, '|')) {
                 answer = token;
             }
+            if (std::getline(ss, token, '|')) {
+                bonusQuestion = token;
+            }
+            if (std::getline(ss, token, '|')) {
+                bonusAnswer = token;
+            }
+
         }
         std::string getQuestion(){
             return question;
@@ -30,23 +37,12 @@ class Riddle{
         std::string getAnswer(){
             return answer;
         }
-    void bonusRiddle(std::string parseLine){
-            std::stringstream ss(parseLine);
-            std::string token;
-
-            if (std::getline(ss, token, '|')) {
-                bonusQuestion = token;
-            }
-            if (std::getline(ss, token, '|')) {
-                bonusAnswer = token;
-            }
-    }
         std::string getBonusQuestion(){ 
             return bonusQuestion;
         }
         std::string getBonusAnswer(){
             return bonusAnswer;
         }
-    
+        
 };
 #endif
