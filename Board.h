@@ -10,6 +10,7 @@ class Board {
     private:
         std::vector<Event> events;
         std::vector<Riddle> riddles; 
+        std::vector<Riddle> bonusRiddles;
 
         static const int _BOARD_SIZE = 52;
         static const int _MAX_PLAYERS = 2;
@@ -204,6 +205,9 @@ class Board {
             if (answer == riddle.getAnswer()){
                 std::cout << "Correct!" << std::endl;
                 return 500;
+                Riddle bonusRiddle = bonusRiddles[rand()% riddles.size()];
+                std:: cout << "Congrats on solving the first riddle! You will now recieve a bonus riddle to gain an additional 250 Insight Points" << endl;
+                
             }
             else{
                 std::cout << "The correct answer was: " << riddle.getAnswer() << std:: endl;

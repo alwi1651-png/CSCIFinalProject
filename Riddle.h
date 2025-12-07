@@ -9,6 +9,8 @@ class Riddle{
     private: 
         std::string question;
         std::string answer;
+        std::string bonusQuestion;
+        std::string bonusAnswer;
 
     public:
         Riddle(std::string parseLine) {
@@ -28,6 +30,23 @@ class Riddle{
         std::string getAnswer(){
             return answer;
         }
+    void bonusRiddle(std::string parseLine){
+            std::stringstream ss(parseLine);
+            std::string token;
 
+            if (std::getline(ss, token, '|')) {
+                bonusQuestion = token;
+            }
+            if (std::getline(ss, token, '|')) {
+                bonusAnswer = token;
+            }
+    }
+        std::string getBonusQuestion(){ 
+            return bonusQuestion;
+        }
+        std::string getBonusAnswer(){
+            return bonusAnswer;
+        }
+    
 };
 #endif

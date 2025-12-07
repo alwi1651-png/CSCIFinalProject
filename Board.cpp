@@ -51,6 +51,11 @@ Board::Board(vector<bool> isFellowship){
         Riddle r(line);
         riddles.push_back(r);
     }
+
+    ifstream bonusRiddleFile("bonusRiddles.txt");
+    while(getline(bonusRiddleFile, line))
+    
+
     initializeBoard();
 }
 

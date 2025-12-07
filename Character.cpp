@@ -1,95 +1,118 @@
+#include "Character.h"
 #include <fstream>
 #include <iostream>
 #include <vector>
 #include <string>
-#include "Character.h"
+#include <sstream>
 
+// Initialize static vectors
+std::vector<std::string> Character::names;
+std::vector<int> Character::experience;
+std::vector<int> Character::accuracy;
+std::vector<int> Character::efficiency;
+std::vector<int> Character::insight;
+std::vector<int> Character::discoveryPoints;
+std::vector<bool> Character::isCharacterTaken;
 
-
-Character::Character(){
+// Default constructor
+Character::Character() {
     playerIndex = 0;
 }
-Character::Character(int playeridx)  {
+
+// Main constructor
+Character::Character(int playeridx) {
     playerIndex = playeridx;
-    
+    isFellowship = true;
 
-
-    isFellowship=true;
     std::ifstream file("characters.txt");
     std::string line;
-    std::cout << "Whats your name bruh?  ";
+    std::cout << "What's your name? ";
     std::cin >> playerName;
-    
 
-    // Skip header
-    getline(file, line);
+    // Only load characters if not already loaded
+    if (names.empty()) {
+        getline(file, line); // skip header
+        while (std::getline(file, line)) {
+            if (line.empty()) continue;
+            std::stringstream ss(line);
+            std::string token;
+            std::vector<std::string> fields;
 
-    while (std::getline(file, line)) {
-        if (line.empty()) continue;
+            while (std::getline(ss, token, '|')) {
+                fields.push_back(token);
+            }
 
-        std::stringstream ss(line);
-        std::string token;
+            if (fields.size() != 6) {
+                std::cerr << "Malformed line: " << line << "\n";
+                continue;
+            }
 
-        // Expected 6 fields: name | exp | acc | eff | insight | dp
-        std::vector<std::string> fields;
-        while (std::getline(ss, token, '|')) {
-            fields.push_back(token);
+            names.push_back(fields[0]);
+            experience.push_back(std::stoi(fields[1]));
+            accuracy.push_back(std::stoi(fields[2]));
+            efficiency.push_back(std::stoi(fields[3]));
+            insight.push_back(std::stoi(fields[4]));
+            discoveryPoints.push_back(std::stoi(fields[5]));
         }
 
-        if (fields.size() != 6) {
-            std::cerr << "Malformed line: " << line << "\n";
-            continue;
-        }
-
-        names.push_back(fields[0]);
-        experience.push_back(std::stoi(fields[1]));
-        accuracy.push_back(std::stoi(fields[2]));
-        efficiency.push_back(std::stoi(fields[3]));
-        insight.push_back(std::stoi(fields[4]));
-        discoveryPoints.push_back(std::stoi(fields[5]));
+        // Initialize availability vector
+        isCharacterTaken.resize(names.size(), false);
     }
-    
-    // Print character info using stored vectors
+
+    // Display available characters
     std::cout << "\nAVAILABLE CHARACTERS\n";
     std::cout << "------------------------------------------------------------------\n";
     for (size_t i = 0; i < names.size(); ++i) {
-        std::cout 
-            << "Choice Number: "<< i<< "\n"
-            <<"Name: " << names[i] <<"\n"
-            <<"Experience: "<< experience[i] <<"\n"
-            << "Accuracy: "<<accuracy[i]<<"\n"
-            << "Efficiency: "<<efficiency[i] <<"\n"
-            << "Insight: "<< insight[i] <<"\n"
-            << "Discovery points: " << discoveryPoints[i] << "\n";
-
+        std::cout << "Choice Number: " << i << "\n"
+                  << "Name: " << names[i] << "\n"
+                  << "Experience: " << experience[i] << "\n"
+                  << "Accuracy: " << accuracy[i] << "\n"
+                  << "Efficiency: " << efficiency[i] << "\n"
+                  << "Insight: " << insight[i] << "\n"
+                  << "Discovery Points: " << discoveryPoints[i] << "\n"
+                  << "Status: " << (isCharacterTaken[i] ? "Taken" : "Available") << "\n";
         std::cout << "------------------------------------------------------------------\n";
     }
-    // These vectors now hold all character data for later use
 
-    std::cout << "\n";
+    // Prompt player to select a character
+   int choice = -1;
+while (true) {
+    std::cout << "\nSelect your character by entering the corresponding number (0-" 
+              << names.size() - 1 << "): ";
+    std::cin >> choice;
 
-    //prompt user to select character
-    int choice = -1;
-
-    while (choice < 0 || choice >= static_cast<int>(names.size())) {
-        std::cout << "\nSelect your character by entering the corresponding number (0-" 
-                << names.size() - 1 << "): ";
-        std::cin >> choice;
-
-        if (!std::cin) { // input failed (not a number)
-            std::cin.clear(); // reset cin
-            std::cin.ignore(1000, '\n'); // discard up to 1000 characters until newline
-            std::cout << "Invalid input. Please enter a number.\n";
-            choice = -1; // reset choice so loop continues
-            continue;
-        }
-
-        if (choice < 0 || choice >= static_cast<int>(names.size())) {
-            std::cout << "Number out of range. Try again.\n";
-        }
+    if (!std::cin) {
+        std::cin.clear();
+        std::cin.ignore(1000, '\n');
+        std::cout << "Invalid input. Please enter a number.\n";
+        continue;
     }
 
-    std::cout << "You selected: " << names[choice] << "\n";
+    if (choice < 0 || choice >= static_cast<int>(names.size())) {
+        std::cout << "Number out of range. Try again.\n";
+        continue;
+    }
+
+    if (isCharacterTaken[choice]) {
+        std::cout << "Sorry, that character has already been chosen. Pick another.\n";
+        continue; // loop again
+    }
+
+    // Only break if choice is valid and not taken
+    break;
+}
+isCharacterTaken[choice] = true; // mark as taken after validation
+
+
+    // Assign character stats
+    characterName = names[choice];
+    characterExperience = experience[choice];
+    characterAccuracy = accuracy[choice];
+    characterEfficiency = efficiency[choice];
+    characterInsight = insight[choice];
+    characterDiscoveryPoints = discoveryPoints[choice];
+
+   std::cout << "You selected: " << names[choice] << "\n";
     characterName = names[choice];
     characterExperience = experience[choice];   
     characterAccuracy = accuracy[choice];
@@ -97,7 +120,7 @@ Character::Character(int playeridx)  {
     characterInsight = insight[choice];
     characterDiscoveryPoints = discoveryPoints[choice];
 
-   
+    // Path selection
     int pathChoice = -1;
     while (pathChoice < 0 || pathChoice >= 2) {
         std::cout << R"(
@@ -125,11 +148,11 @@ Character::Character(int playeridx)  {
 
         std::cin >> pathChoice;
 
-        if (!std::cin) { // input failed (not a number)
-            std::cin.clear(); // reset cin
-            std::cin.ignore(1000, '\n'); // discard up to 1000 characters until newline
+        if (!std::cin) {
+            std::cin.clear();
+            std::cin.ignore(1000, '\n');
             std::cout << "Invalid input. Please enter a number.\n";
-            pathChoice = -1; // reset choice so loop continues
+            pathChoice = -1;
             continue;
         }
 
@@ -137,7 +160,8 @@ Character::Character(int playeridx)  {
             std::cout << "Number out of range. Try again.\n";
         }
     }
-    if(pathChoice == 0){
+
+      if(pathChoice == 0){
         std::cout << "You selected Training Fellowship path.\n";
     } else {
         std::cout << "You selected Direct Lab Assignment path.\n";

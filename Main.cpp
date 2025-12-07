@@ -1,3 +1,4 @@
+//Group Project With Alex Wilson and Mason Paprzycki
 #include "Board.h"
 #include "Character.h"
 #include "Event.h"
