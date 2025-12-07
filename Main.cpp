@@ -10,6 +10,30 @@
 
 using namespace std; 
 
+vector<Character> rankPlayers(vector<Character> players) {
+    vector<int> scores(players.size());
+
+    for (int i = 0; i < players.size(); i++) {
+        scores[i] = players[i].convertTraitsToDiscoveryPoints();
+    }
+
+    for (int i = 0; i < players.size(); i++) {
+        for (int j = 0; j < players.size() - 1; j++) {
+            if (scores[j] < scores[j + 1]) {
+                int tempScore = scores[j];
+                scores[j] = scores[j + 1];
+                scores[j + 1] = tempScore;
+
+                Character tempPlayer = players[j];
+                players[j] = players[j + 1];
+                players[j + 1] = tempPlayer;
+            }
+        }
+    }
+
+    return players;
+}
+
 int main() {
     std::cout << "Welcome to the Genome Quest!\n";
     std::cout << "Player One Registration:\n";

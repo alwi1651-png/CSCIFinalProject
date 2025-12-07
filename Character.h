@@ -62,11 +62,17 @@ public:
     void addExperience(int delta);
 
     // Conversion and display
-    int convertTraitsToDiscoveryPoints();
+    int convertTraitsToDiscoveryPoints(){
+
+        return ((
+            (characterAccuracy/100)
+            + (characterEfficiency/100)
+            + (characterInsight/100)
+            )*1000)+characterDiscoveryPoints;
+    };
     void printSummary();
 
-    // Character selection utilities
-    static bool isTaken(int choice); // check if a character is already taken
+
 };
 
 #endif

@@ -1,7 +1,4 @@
 Description | PathType (0 = Training Fellowship; 1 = Direct Lab Assignment) | Advisor (0 = none; 1 = Dr. Aliquot; 2 = Dr. Assembler; 3 = Dr. Pop-Gen; 4 = Dr. Bio-Script; 5 = Dr. Loci) | DiscoveryPoints (Lose or Gain)
-
-//Example of Negative Events with Advisor Protection:
-
 A critical DNA sample is contaminated|1|1|-500
 The main DNA sequencer machine breaks down|0|2|-200
 Your bioinformatics script has a bug|1|4|-400
@@ -22,9 +19,6 @@ The high-performance computer is down for maintenance|1|2|-300
 Misread and label and sequences the wrong lion's DNA|0|4|-500
 Your analysis of a lion's lineage is proven incorrect by new field data|1|3|-400
 A mysterious contamination shows up in your control samples|0|1|-300
-
-//Example of Positive Events:
-
 A tip from Dr. Bio-Script helps your script run 50% faster|1|0|800
 You discover an overlooked, archived tissue sample from a key lion|0|0|600
 A senior scientist praises your lab notes|1|0|500
