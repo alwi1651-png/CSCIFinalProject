@@ -196,73 +196,31 @@ class Board {
             std::cout << "RNA transcript: " << strand << std::endl;
         }
 
-       std::string fixString(std::string s) {
-    // remove leading spaces
-    while (!s.empty() && (s[0] == ' ' || s[0] == '\t' || s[0] == '\n' || s[0] == '\r')) {
-        s.erase(0, 1);
-    }
-
-    // remove trailing spaces
-    while (!s.empty() && (s[s.size()-1] == ' ' || s[s.size()-1] == '\t' ||
-                          s[s.size()-1] == '\n' || s[s.size()-1] == '\r')) {
-        s.erase(s.size()-1, 1);
-    }
-
-    // make lowercase
-    for (int i = 0; i < s.size(); i++) {
-        s[i] = tolower(s[i]);
-    }
-
-    return s;
-}
-
-int handleRiddle() {
-
-    Riddle riddle = riddles[rand() % riddles.size()];
-
-    std::cout << "Riddle challenge! Solve correctly to gain 500 Insight Points.\n";
-    std::cout << riddle.getQuestion() << std::endl;
-
-    std::string answer;
-    std::getline(std::cin >> std::ws, answer);   // Read full user answer
-
-    // Fix user answer
-    answer = fixString(answer);
-
-    // Fix stored answer from file
-    std::string correctAnswer = fixString(riddle.getAnswer());
-
-    if (answer == correctAnswer) {
-        std::cout << "Correct!\n";
-
-        // ---------------------------
-        // BONUS RIDDLE SECTION
-        // ---------------------------
-
-        Riddle bonusRiddle = bonusRiddles[rand() % bonusRiddles.size()];
-
-        std::cout << "Congrats on solving the first riddle! You now get a bonus riddle worth 250 points.\n";
-        std::cout << bonusRiddle.getBonusQuestion() << std::endl;
-
-        std::string bonusAnswer;
-        std::getline(std::cin >> std::ws, bonusAnswer);
-
-        bonusAnswer = fixString(bonusAnswer);
-        std::string correctBonus = fixString(bonusRiddle.getBonusAnswer());
-
-        if (bonusAnswer == correctBonus) {
-            std::cout << "Correct!\n";
-            return 750; // 500 + 250
+        int handleRiddle() {
+            Riddle riddle = riddles[rand()% riddles.size()];
+            std::cout << "Riddle challenge! Solve correctly to gain 500 Insight Points.\n";
+            std::cout << riddle.getQuestion() << std::endl;
+            std::string answer;
+            std::cin>>  answer;
+            if (answer == riddle.getAnswer()){
+                std::cout << "Correct!" << std::endl;
+                
+                std:: cout << "Congrats on solving the first riddle! You will now recieve a bonus riddle to gain an additional 250 Insight Points" << std::endl<<""<<std::endl;
+                std::cout<< riddle.getBonusQuestion()<<std::endl;
+                std::cin>>  answer;
+                if(answer == riddle.getBonusAnswer()){
+                    return 750;
+                }
+                else{
+                    std::cout<<"The correct bonus answer was"<< riddle.getBonusAnswer()<<std::endl;
+                    return 500;
+                }
+                
+            }
+            else{
+                std::cout << "The correct answer was: " << riddle.getAnswer() << std:: endl;
+                return 0;
+            }
         }
-
-        return 500; // got main riddle but not bonus
-    }
-    else {
-        std::cout << "The correct answer was: " << riddle.getAnswer() << std::endl;
-        return 0;
-    }
-}
-
-
 };
 #endif
