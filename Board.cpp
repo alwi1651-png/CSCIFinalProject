@@ -54,17 +54,15 @@ while (getline(riddleFile, line)) {
 }
 
 ifstream bonusRiddleFile("bonusRiddles.txt");
-getline(riddleFile, line); // skip header
+getline(bonusRiddleFile, line); // skip header
+
 while (getline(bonusRiddleFile, line)) {
     if (line.empty()) continue;
 
-    Riddle br("placeholder");  //consturctor requires a string 
-    br.bonusRiddle(line);       //load bonus question + bonus answer
-
+    Riddle br(line, true);   // use bonus constructor
     bonusRiddles.push_back(br);
 }
 
-    initializeBoard();
 }
 
 
