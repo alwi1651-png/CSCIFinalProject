@@ -5,7 +5,7 @@
 #include <string>
 #include <sstream>
 
-// Initialize static vectors
+// Initialize vectors
 std::vector<std::string> Character::names;
 std::vector<int> Character::experience;
 std::vector<int> Character::accuracy;
