@@ -196,31 +196,38 @@ class Board {
             std::cout << "RNA transcript: " << strand << std::endl;
         }
 
-        int handleRiddle() {
-            Riddle riddle = riddles[rand()% riddles.size()];
-            std::cout << "Riddle challenge! Solve correctly to gain 500 Insight Points.\n";
-            std::cout << riddle.getQuestion() << std::endl;
-            std::string answer;
-            std::cin>>  answer;
-            if (answer == riddle.getAnswer()){
-                std::cout << "Correct!" << std::endl;
-                
-                std:: cout << "Congrats on solving the first riddle! You will now recieve a bonus riddle to gain an additional 250 Insight Points" << std::endl<<""<<std::endl;
-                std::cout<< riddle.getBonusQuestion()<<std::endl;
-                std::cin>>  answer;
-                if(answer == riddle.getBonusAnswer()){
-                    return 750;
-                }
-                else{
-                    std::cout<<"The correct bonus answer was"<< riddle.getBonusAnswer()<<std::endl;
-                    return 500;
-                }
-                
-            }
-            else{
-                std::cout << "The correct answer was: " << riddle.getAnswer() << std:: endl;
-                return 0;
-            }
+       int handleRiddle() {
+    // pick a normal riddle
+    Riddle riddle = riddles[rand() % riddles.size()];
+    std::cout << "Riddle challenge! Solve correctly to gain 500 Insight Points.\n";
+    std::cout << riddle.getQuestion() << std::endl;
+
+    std::string answer;
+    std::getline(std::cin >> std::ws, answer); // read full line
+
+    if (answer == riddle.getAnswer()) {
+        std::cout << "Correct!" << std::endl;
+
+        // pick a bonus riddle separately
+        Riddle bonusRiddle = bonusRiddles[rand() % bonusRiddles.size()];
+
+        std::cout << "Congrats on solving the first riddle! You will now receive a bonus riddle to gain an additional 250 Insight Points\n\n";
+        std::cout << bonusRiddle.getBonusQuestion() << std::endl;
+
+        std::getline(std::cin >> std::ws, answer); // read full line
+        if (answer == bonusRiddle.getBonusAnswer()) {
+            std::cout << "Correct!" << std::endl;
+            return 750;
+        } else {
+            std::cout << "The correct bonus answer was " << bonusRiddle.getBonusAnswer() << std::endl;
+            return 500;
         }
+
+    } else {
+        std::cout << "The correct answer was: " << riddle.getAnswer() << std::endl;
+        return 0;
+    }
+}
+
 };
 #endif

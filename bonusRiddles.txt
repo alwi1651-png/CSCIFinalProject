@@ -1,0 +1,20 @@
+Question|Answer
+What is the basic unit of heredity passed from parents to offspring?|Gene
+What is the molecule that carries genetic instructions in living organisms?|DNA
+What is the process by which DNA is copied before cell division? | Replication
+What is the sequence of three nucleotides that codes for an amino acid called?|Codon
+What cellular structure is responsible for protein synthesis?|Ribosome
+What is the molecule that carries amino acids to the ribosome during translation?|tRNA
+What process converts mRNA into a protein?|Translation
+What process produces mRNA from DNA?|Transcription
+What is a change in the DNA sequence called?|Mutation
+What organelle contains most of the cell’s genetic material?|Nucleus
+What nitrogenous base pairs with adenine in DNA?|Thymine
+What nitrogenous base pairs with cytosine in DNA?|Guanine
+What is the organelle where energy is produced in a cell?|Mitochondria
+What is the process by which cells divide to make two identical cells?|Mitosis
+What is the jelly-like substance inside the cell called?|Cytoplasm
+What organelle makes proteins in the cell?|Ribosome
+What are the thread-like structures that carry genetic information?|Chromosomes
+What is the process plants use to make food from sunlight?|Photosynthesis
+What gas do humans inhale for respiration?|Oxygen

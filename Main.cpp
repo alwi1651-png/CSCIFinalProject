@@ -1,4 +1,4 @@
-//Group Project With Alex Wilson and Mason Paprzycki
+// Group Project With Alex Wilson and Mason Paprzycki
 #include "Board.h"
 #include "Character.h"
 #include "Event.h"
@@ -11,22 +11,13 @@
 using namespace std; 
 
 vector<Character> rankPlayers(vector<Character> players) {
-    vector<int> scores(players.size());
+    int n = players.size();
 
-    for (int i = 0; i < players.size(); i++) {
-        scores[i] = players[i].convertTraitsToDiscoveryPoints();
-    }
-
-    for (int i = 0; i < players.size(); i++) {
-        for (int j = 0; j < players.size() - 1; j++) {
-            if (scores[j] < scores[j + 1]) {
-                int tempScore = scores[j];
-                scores[j] = scores[j + 1];
-                scores[j + 1] = tempScore;
-
-                Character tempPlayer = players[j];
-                players[j] = players[j + 1];
-                players[j + 1] = tempPlayer;
+    // Bubble sort players by Discovery Points (descending)
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (players[j].convertTraitsToDiscoveryPoints() < players[j + 1].convertTraitsToDiscoveryPoints()) {
+                swap(players[j], players[j + 1]);
             }
         }
     }
@@ -37,9 +28,9 @@ vector<Character> rankPlayers(vector<Character> players) {
 int main() {
     std::cout << "Welcome to the Genome Quest!\n";
     std::cout << "Player One Registration:\n";
-    Character player1(0); //create player one with player index 0
+    Character player1(0); // create player one with player index 0
     std::cout << "Player Two Registration:\n";
-    Character player2(1); //create player two with player index 1
+    Character player2(1); // create player two with player index 1
     vector<Character> players = {player1, player2};
     
     srand(time(0)); // Makes sure the board is random
@@ -49,16 +40,16 @@ int main() {
     game.displayBoard();
     cout << endl; 
 
-    int turn = 0; //Player 1 
+    int turn = 0; // Player 1 
     int steps = 0;  
     bool player1Finished = false; 
     bool player2Finished = false; 
-    bool playerOneTurn =true;
+    bool playerOneTurn = true;
     int turnActions;
 
-    while(!game.GameFinished()){ 
+    while (!game.GameFinished()) { 
 
-        if(playerOneTurn){
+        if (playerOneTurn) {
             vector<int> statsDelta = game.playerTurn(
                 player1.getPlayerIndex(),
                 player1.getPlayerName(),
@@ -69,18 +60,17 @@ int main() {
                 player1.getCharacterAccuracy(),
                 player1.getCharacterExperience());
 
-                //we order by discovery points, insight, efficiency, accurace and experience
-                player1.addDiscoveryPoints(statsDelta[0]);
-                player1.addInsight(statsDelta[1]);
-                player1.addEfficiency(statsDelta[2]);
-                player1.addAccuracy(statsDelta[3]);
-                player1.addExperience(statsDelta[4]);
+            // update player stats
+            player1.addDiscoveryPoints(statsDelta[0]);
+            player1.addInsight(statsDelta[1]);
+            player1.addEfficiency(statsDelta[2]);
+            player1.addAccuracy(statsDelta[3]);
+            player1.addExperience(statsDelta[4]);
 
-                playerOneTurn = !playerOneTurn;
+            playerOneTurn = !playerOneTurn;
         }
-        //player two turn
         else { 
-            vector<int> statsDelta  = game.playerTurn(
+            vector<int> statsDelta = game.playerTurn(
                 player2.getPlayerIndex(),
                 player2.getPlayerName(),
                 player2.getCharacterName(),
@@ -97,26 +87,32 @@ int main() {
             player2.addExperience(statsDelta[4]);
 
             playerOneTurn = !playerOneTurn;
-            }
         }
+    }
 
     std::cout << "Both scientists have reached the Genome Conference" << endl;  
-    std::cout << std:: endl; 
+    std::cout << std::endl; 
     player1.printSummary();
-    std::cout << std:: endl; 
+    std::cout << std::endl; 
     player2.printSummary();
-    std::cout << std:: endl; 
-    player1.convertTraitsToDiscoveryPoints(); 
-    player2.convertTraitsToDiscoveryPoints();
+    std::cout << std::endl; 
 
-    if(player1.convertTraitsToDiscoveryPoints() > player2.convertTraitsToDiscoveryPoints()){
-        cout << player1.getPlayerName() << " is your Lead Genomicist with " << player1.convertTraitsToDiscoveryPoints() << " Discovery Points" << endl;
-       
+    // Rank players and display leaderboard
+    vector<Character> sortedPlayers = rankPlayers(players);
+
+    cout << "\n--- Final Leaderboard ---\n";
+    for (int i = 0; i < sortedPlayers.size(); i++) {
+        cout << i + 1 << ". " 
+             << sortedPlayers[i].getPlayerName() 
+             << " (" << sortedPlayers[i].convertTraitsToDiscoveryPoints() 
+             << " Discovery Points)\n";
     }
-    else{
-        cout << player2.getPlayerName() << " is your Lead Genomicist with " <<  player2.convertTraitsToDiscoveryPoints() << " Discovery Points" << endl;
-       
-    }
+
+    cout << "\nLead Genomicist: " 
+         << sortedPlayers[0].getPlayerName() 
+         << " with " 
+         << sortedPlayers[0].convertTraitsToDiscoveryPoints() 
+         << " Discovery Points!\n";
+
     return 0;
-
 }
