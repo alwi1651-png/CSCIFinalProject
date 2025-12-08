@@ -10,7 +10,6 @@ class Board {
     private:
         std::vector<Event> events;
         std::vector<Riddle> riddles; 
-        std::vector<Riddle> bonusRiddles;
 
         static const int _BOARD_SIZE = 52;
         static const int _MAX_PLAYERS = 2;
@@ -85,7 +84,9 @@ class Board {
             for (int i = 0; i < (int)strandOne.length(); i++) {
                 if (strandOne[i] == strandTwo[i]) matches++;
             }
-            return (double)matches / strandOne.length();
+            double strandSimilarity= (double)matches / strandOne.length();
+            std::cout<<"strand similarity: "<< strandSimilarity<<std::endl;
+            return strandSimilarity;
         }
 
         int bestStrandMatch(std::string input_strand, std::string target_strand) {
@@ -105,6 +106,7 @@ class Board {
                     indexOfMaxSimilarity = i;
                 }
             }
+            std::cout<<"best strand match: "<< indexOfMaxSimilarity<<std::endl;
             return indexOfMaxSimilarity;
         }
 
@@ -209,17 +211,16 @@ class Board {
         std::cout << "Correct!" << std::endl;
 
         // pick a bonus riddle separately
-        Riddle bonusRiddle = bonusRiddles[rand() % bonusRiddles.size()];
 
-        std::cout << "Congrats on solving the first riddle! You will now receive a bonus riddle to gain an additional 250 Insight Points\n\n";
-        std::cout << bonusRiddle.getBonusQuestion() << std::endl;
 
+        std::cout << "Congrats on solving the first riddle! You will now receive a bonus riddle to gain an additional 250 Insight Points\n";
+        std::cout<< riddle.getBonusQuestion()<<std::endl;
         std::getline(std::cin >> std::ws, answer); // read full line
-        if (answer == bonusRiddle.getBonusAnswer()) {
+        if (answer == riddle.getBonusAnswer()) {
             std::cout << "Correct!" << std::endl;
             return 750;
         } else {
-            std::cout << "The correct bonus answer was " << bonusRiddle.getBonusAnswer() << std::endl;
+            std::cout << "The correct bonus answer was " << riddle.getBonusAnswer() << std::endl;
             return 500;
         }
 

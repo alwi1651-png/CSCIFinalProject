@@ -13,13 +13,6 @@ public:
 
         if (std::getline(ss, token, '|')) question = token;
         if (std::getline(ss, token, '|')) answer = token;
-    }
-
-    // Bonus riddle constructor
-    Riddle(std::string parseLine, bool isBonus) {
-        std::stringstream ss(parseLine);
-        std::string token;
-
         if (std::getline(ss, token, '|')) bonusQuestion = token;
         if (std::getline(ss, token, '|')) bonusAnswer = token;
     }

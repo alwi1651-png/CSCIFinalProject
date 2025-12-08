@@ -44,24 +44,15 @@ Board::Board(vector<bool> isFellowship){
         events.push_back(e);
     }
 
-   ifstream riddleFile("riddles.txt");
-getline(riddleFile, line);  // skips header
+    ifstream riddleFile("riddles.txt");
+    getline(riddleFile, line);  // skips header
 
-while (getline(riddleFile, line)) {
-    if (line.empty()) continue;  // skip empty lines
-    Riddle r(line);
-    riddles.push_back(r);
-}
+    while (getline(riddleFile, line)) {
+        if (line.empty()) continue;  // skip empty lines
+        Riddle r(line);
+        riddles.push_back(r);
+    }
 
-ifstream bonusRiddleFile("bonusRiddles.txt");
-getline(bonusRiddleFile, line); // skip header
-
-while (getline(bonusRiddleFile, line)) {
-    if (line.empty()) continue;
-
-    Riddle br(line, true);   // use bonus constructor
-    bonusRiddles.push_back(br);
-}
 
 }
 
@@ -266,6 +257,12 @@ while (!turnComplete) {
 
     int choice;
     cin >> choice;
+    if (cin.fail() || ((choice<1) || (choice>5)) ){
+    cin.clear();
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    cout << "Invalid input. Please enter a number between 1 and 5.\n";
+    continue;
+    }
 
     switch (choice) {
         case 1: { // Check Player Progress
@@ -280,17 +277,21 @@ while (!turnComplete) {
                           << ", Efficiency: " << efficiency
                           << ", Accuracy: " << accuracy << std::endl;
             }
+            turnComplete =true;
             break;
         }
         case 2: { // Review Character
             cout << "Character Name: " << characterName
                       << ", Experience: " << experience << std::endl;
+            turnComplete =true;
             break;
         }
         case 3: { // Check Position
             displayBoard();
-            break;
+            turnComplete=true;
+            break; 
         }
+        
         case 4: { // Review Advisor
             cout << "1) Display Advisor Abilities\n";
             cout << "2) Use Abilities for Challenge\n";
@@ -302,6 +303,7 @@ while (!turnComplete) {
                 cout << "Using advisor abilities for current challenge...\n";
                 // Implement ability effect here
             }
+            turnComplete =true;
             break;
         }
         case 5: { // Move Forward
@@ -315,26 +317,21 @@ while (!turnComplete) {
             cout << playerName << " is on square " << position << std::endl;
 
             if (tile_color == 'G') { // Green tile
-                if (rand() % 2 == 0) {
-                    cout << "Green tile event triggered!\n";
-                    deltaDiscovery += greenTileTurn(player_index);
-                } else {
-                    cout << "No event on this green tile.\n";
-                }
+                deltaDiscovery +=  greenTileTurn(player_index);
             } else if (tile_color == 'B') { // Blue tile
                 string s1, s2;
                 cout << "DNA Task 1 - Enter two DNA strands of equal length:\n";
                 cin >> s1 >> s2;
-                deltaDiscovery += static_cast<int>(strandSimilarity(s1, s2) * 100);
-                deltaInsight += 10;
+                deltaDiscovery += static_cast<int>(strandSimilarity(s1, s2) * 1000);
+                deltaInsight += 100;
                 cout << "Discovery Points Increase: " << deltaDiscovery <<endl;
                 cout << "Insight Increase: " << deltaInsight << endl;; 
             } else if (tile_color == 'P') { // Pink tile
                 string s1, s2;
                 cout << "DNA Task 2 - Enter two DNA strands (unequal lengths allowed):\n";
                 cin >> s1 >> s2;
-                deltaDiscovery += static_cast<int>(bestStrandMatch(s1, s2) * 100);
-                deltaInsight += 10;
+                deltaDiscovery += static_cast<int>(bestStrandMatch(s1, s2) * 1000);
+                deltaInsight += 100;
                 cout << "Discovery Points Increase: " << deltaDiscovery <<endl;
                 cout << "Insight Increase: " << deltaInsight << endl;
             } else if (tile_color == 'R') { // Red tile
@@ -364,8 +361,8 @@ while (!turnComplete) {
             turnComplete = true;
             break;
         }
-        default:
-            cout << "Invalid choice, try again.\n";
+      
+        
     }
 }
 
